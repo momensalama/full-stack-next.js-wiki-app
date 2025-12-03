@@ -6,7 +6,7 @@ import * as schema from "./schema";
 
 assert(
   process.env.DATABASE_URL,
-  "DATABASE_URL is not defined in environment variables"
+  "DATABASE_URL is not defined in environment variables",
 );
 
 export const sql = neon(process.env.DATABASE_URL);

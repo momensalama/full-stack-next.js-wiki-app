@@ -16,7 +16,7 @@ export default async function ViewArticlePage({
   // Mock permission check - in a real app, this would come from auth/user context
   const canEdit = true; // Set to true for demonstration
 
-  const article = getArticleById(+id);
+  const article = await getArticleById(+id);
 
   if (!article) {
     notFound();
