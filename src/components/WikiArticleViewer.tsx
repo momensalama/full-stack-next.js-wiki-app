@@ -1,6 +1,14 @@
 "use client";
 
-import { Calendar, ChevronRight, Edit, Home, Trash, User } from "lucide-react";
+import {
+  Calendar,
+  ChevronRight,
+  Edit,
+  Eye,
+  Home,
+  Trash,
+  User,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
@@ -8,6 +16,8 @@ import { deleteArticleForm } from "@/app/actions/articles";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useState, useEffect } from "react";
+import { logPageView } from "@/app/actions/pageViews";
 
 interface ViewerArticle {
   title: string;
@@ -28,6 +38,7 @@ export default function WikiArticleViewer({
   article,
   canEdit = false,
 }: WikiArticleViewerProps) {
+  const [localPageviews, setLocalPageviews] = useState<number | null>(null);
   // Format date for display
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -37,6 +48,15 @@ export default function WikiArticleViewer({
       day: "numeric",
     });
   };
+
+  useEffect(() => {
+    async function fetchPageviews() {
+      const newCount = await logPageView(article.id);
+      setLocalPageviews(newCount);
+    }
+
+    fetchPageviews();
+  }, [article.id]);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -70,9 +90,13 @@ export default function WikiArticleViewer({
               <Calendar className="h-4 w-4 mr-1" />
               <span>{formatDate(article.createdAt)}</span>
             </div>
-            <div className="flex items-center">
-              <Badge variant="secondary">Article</Badge>
+            <Badge variant="secondary">Article</Badge>
+            <div className="ml-3 flex items-center text-sm text-muted-foreground">
+              <Eye className="h-4 w-4 mr-1" />
+              <span>{localPageviews ? localPageviews : "—"}</span>
+              <span className="ml-1">views</span>
             </div>
+            ;
           </div>
         </div>
 
@@ -218,31 +242,10 @@ export default function WikiArticleViewer({
       {/* Footer Actions */}
       <div className="mt-8 flex justify-between items-center">
         <Link href="/">
-          <Button variant="outline">← Back to Articles</Button>
+          <Button variant="outline" className="cursor-pointer">
+            ← Back to Articles
+          </Button>
         </Link>
-
-        {canEdit && (
-          <div className="flex items-center gap-2">
-            <Link href={`/wiki/edit/${article.id}`} className="cursor-pointer">
-              <Button className="cursor-pointer">
-                <Edit className="h-4 w-4 mr-2" />
-                Edit This Article
-              </Button>
-            </Link>
-
-            <form action={deleteArticleForm}>
-              <input type="hidden" name="id" value={String(article.id)} />
-              <Button
-                type="submit"
-                variant="destructive"
-                className="cursor-pointer"
-              >
-                <Trash className="h-4 w-4 mr-2" />
-                Delete
-              </Button>
-            </form>
-          </div>
-        )}
       </div>
     </div>
   );

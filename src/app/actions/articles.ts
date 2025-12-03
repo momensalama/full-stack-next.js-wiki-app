@@ -7,6 +7,7 @@ import { db } from "@/db";
 import { authorizedToEditArticle } from "@/db/authZ";
 import { articles } from "@/db/schema";
 import { stackServerApp } from "@/stack/server";
+import redis from "@/cache";
 
 export type CreateArticleInput = {
   title: string;
@@ -82,6 +83,8 @@ export async function deleteArticle(id: string) {
   console.log("🗑️ deleteArticle called:", id);
 
   await db.delete(articles).where(eq(articles.id, Number(id)));
+
+  await redis.del("articles:list");
 
   return { success: true, message: `Article ${id} delete logged (stub)` };
 }
