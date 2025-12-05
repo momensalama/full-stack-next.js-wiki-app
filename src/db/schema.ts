@@ -14,6 +14,7 @@ export const articles = pgTable("articles", {
     .references(() => usersSync.id),
   createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "string" }).defaultNow().notNull(),
+  summary: text("summary"),
 });
 
 export const articlesRelations = relations(articles, ({ one }) => ({

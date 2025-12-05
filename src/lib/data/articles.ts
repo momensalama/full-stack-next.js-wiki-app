@@ -17,6 +17,7 @@ export async function getArticles() {
       title: true,
       content: true,
       createdAt: true,
+      summary: true,
     },
     with: {
       author: {
