@@ -1,4 +1,4 @@
-import WikiEditor from "@/components/WikiEditor";
+import WikiEditor from "@/components/wiki-editor";
 import { stackServerApp } from "@/stack/server";
 
 export default async function NewArticlePage() {

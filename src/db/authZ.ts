@@ -1,13 +1,21 @@
-import { db } from "@/db";
+import { eq } from "drizzle-orm";
+import db from "@/db/index";
+import { articles } from "@/db/schema";
 
-export const authorizedToEditArticle = async (
-  userId: string,
-  articleAuthorId: number,
-) => {
-  const response = await db.query.articles.findFirst({
-    where: (articles, { eq }) =>
-      eq(articles.authorId, userId) && eq(articles.id, articleAuthorId),
-  });
+export const authorizeUserToEditArticle = async function authorizeArticle(
+  loggedInUserId: string,
+  articleId: number,
+): Promise<boolean> {
+  const response = await db
+    .select({
+      authorId: articles.authorId,
+    })
+    .from(articles)
+    .where(eq(articles.id, articleId));
 
-  return response !== null;
+  if (!response.length) {
+    return false;
+  }
+
+  return response[0].authorId === loggedInUserId;
 };

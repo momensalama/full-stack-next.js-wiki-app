@@ -1,4 +1,5 @@
-import WikiCard from "@/components/WikiCard";
+import { WikiCard } from "@/components/ui/wiki-card";
+
 import { getArticles } from "@/lib/data/articles";
 
 export default async function Home() {
@@ -6,7 +7,7 @@ export default async function Home() {
   return (
     <div>
       <main className="max-w-2xl mx-auto mt-10 flex flex-col gap-6">
-        {articles.map(({ title, id, createdAt, summary, author }) => (
+        {articles.map(({ title, id, createdAt, author, summary }) => (
           <WikiCard
             title={title}
             author={author ? author : "Unknown"}

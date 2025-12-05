@@ -1,4 +1,3 @@
-import { relations } from "drizzle-orm";
 import { usersSync } from "drizzle-orm/neon";
 import { boolean, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
@@ -7,6 +6,7 @@ export const articles = pgTable("articles", {
   title: text("title").notNull(),
   slug: text("slug").notNull().unique(),
   content: text("content").notNull(),
+  summary: text("summary"),
   imageUrl: text("image_url"),
   published: boolean("published").default(false).notNull(),
   authorId: text("author_id")
@@ -14,19 +14,9 @@ export const articles = pgTable("articles", {
     .references(() => usersSync.id),
   createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "string" }).defaultNow().notNull(),
-  summary: text("summary"),
 });
 
-export const articlesRelations = relations(articles, ({ one }) => ({
-  author: one(usersSync, {
-    fields: [articles.authorId],
-    references: [usersSync.id],
-  }),
-}));
-
-export { usersSync };
-
-const schema = { articles, articlesRelations, usersSync };
+const schema = { articles };
 export default schema;
 
 export type Article = typeof articles.$inferSelect;

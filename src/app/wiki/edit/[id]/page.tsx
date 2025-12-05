@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import WikiEditor from "@/components/WikiEditor";
+import WikiEditor from "@/components/wiki-editor";
 import { getArticleById } from "@/lib/data/articles";
 import { stackServerApp } from "@/stack/server";
 

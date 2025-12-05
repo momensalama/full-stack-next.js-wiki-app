@@ -16,7 +16,13 @@ interface WikiCardProps {
   href: string;
 }
 
-function WikiCard({ title, author, date, summary, href }: WikiCardProps) {
+export function WikiCard({
+  title,
+  author,
+  date,
+  summary,
+  href,
+}: WikiCardProps) {
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -41,5 +47,3 @@ function WikiCard({ title, author, date, summary, href }: WikiCardProps) {
     </Card>
   );
 }
-
-export default WikiCard;

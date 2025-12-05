@@ -1,12 +1,19 @@
 "use server";
 
 import redis from "@/cache";
+import sendCelebrationEmail from "@/email/celebration-email";
 
-const keyFor = (pageId: number) => `pageviews:article:${pageId}`;
+const keyFor = (id: number | string) => `pageviews:article:${id}`;
 
-export async function logPageView(pageId: number) {
-  const articleKey = keyFor(pageId);
+const milestones = [10, 50, 100, 1000, 10000];
+
+export async function incrementPageview(articleId: number) {
+  const articleKey = keyFor(articleId);
   const newVal = await redis.incr(articleKey);
 
-  return newVal;
+  if (milestones.includes(newVal)) {
+    sendCelebrationEmail(articleId, +newVal); // don't await, just send it
+  }
+
+  return +newVal;
 }
