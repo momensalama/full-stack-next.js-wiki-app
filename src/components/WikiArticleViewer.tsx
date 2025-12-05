@@ -11,13 +11,13 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { deleteArticleForm } from "@/app/actions/articles";
+import { logPageView } from "@/app/actions/pageViews";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useState, useEffect } from "react";
-import { logPageView } from "@/app/actions/pageViews";
 
 interface ViewerArticle {
   title: string;

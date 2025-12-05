@@ -3,11 +3,11 @@
 import { eq } from "drizzle-orm";
 
 import { redirect } from "next/navigation";
+import redis from "@/cache";
 import { db } from "@/db";
 import { authorizedToEditArticle } from "@/db/authZ";
 import { articles } from "@/db/schema";
 import { stackServerApp } from "@/stack/server";
-import redis from "@/cache";
 
 export type CreateArticleInput = {
   title: string;
